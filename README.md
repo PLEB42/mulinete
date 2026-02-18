@@ -1,8 +1,8 @@
-# Mini-moulinette
+# Small-moulinette
 
-![mini-moulinette](mini-moulinette.jpg)
+![small-moulinette](small-moulinette.jpg)
 
-Mini-moulinette is a test runner for 42 assignments, providing automated tests for whole assignment with one command. The goal is to make thorough checking before submitting the assignments, with ease.
+Small-moulinette its a fork of Mini-moulinette(https://github.com/k11q/mini-moulinette), a test runner for 42 assignments, providing automated tests for whole assignment with one command. The goal is to make thorough checking before submitting the assignments, with ease.
 
 
 ## Introduction
@@ -14,17 +14,17 @@ This is now day 11 of piscine. I have wasted so many hours getting evaluated, do
 
 ![screenshot](screenshot.jpg)
 
-- Mini moulinette runs through all the tests cases automatically, and checks if the test conditions are met.
+- small moulinette runs through all the tests cases automatically, and checks if the test conditions are met.
 - It will then output the result.
 - The scores are based on 42's practice, where if easier/earlier questions are incorrect, the rest won't count.
 
 
 # Updating
 
-Mini moulinette is updated daily, to update:
+small moulinette is updated daily, to update:
 
 ```bash
-cd ~/mini-moulinette
+cd ~/small-moulinette
 ```
 
 ```bash
@@ -35,7 +35,7 @@ git pull
 ## Get Started
 
 > ***Warning***
-> Mini moulinette is not 100% accurate, the tests may not cover every edge cases like moulinette. Use with caution.
+> small moulinette is not 100% accurate, the tests may not cover every edge cases like moulinette. Use with caution.
 
 1. Go to your root `~` directory.
 
@@ -47,7 +47,7 @@ cd ~
 2. Clone the git there.
 
 ```bash
-git clone https://github.com/khairulhaaziq/mini-moulinette.git
+git clone https://github.com/joaozinhom/small-moulinette
 ```
 
 
@@ -56,13 +56,13 @@ git clone https://github.com/khairulhaaziq/mini-moulinette.git
 - zsh:
 
 ```zsh
-echo "alias mini='~/mini-moulinette/mini-moul.sh'" >> ~/.zshrc && source ~/.zshrc
+echo "alias small='~/small-moulinette/small-moul.sh'" >> ~/.zshrc && source ~/.zshrc
 ```
 
 - bash:
 
 ```bash
-echo "alias mini='~/mini-moulinette/mini-moul.sh'" >> ~/.bashrc && source ~/.bashrc
+echo "alias small='~/small-moulinette/small-moul.sh'" >> ~/.bashrc && source ~/.bashrc
 ```
 
 
@@ -73,16 +73,16 @@ cd C02
 ```
 
 
-5. Run using command `mini` with assignment number as argument. e.g: C02.
+5. Run using command `small` with assignment number as argument. e.g: C02.
 
 ```bash
-mini C02
+small C02
 ```
 
 e.g: C03
 
 ```bash
-mini C03
+small C03
 ```
 
 6. You can now run it for every assignment directory, where tests are provided. Have fun!
@@ -102,7 +102,7 @@ The error/success messages should be explicit enough. However sometimes you will
 - You need to find the test cases, go here:
 
 ```bash
-cd ~/mini-moulinette/mini-moul/tests
+cd ~/small-moulinette/small-moul/tests
 ```
 
 The current directory contains all the test cases. Every test is in the file that is the same name as the function/program it is testing, e.g. C05/ex00/ft_iterative_factorial.c will contain test for C05 > ex00 > ft_iterative_factorial.c.
@@ -167,14 +167,14 @@ See the above, you can add more tests here. You need to manage your customizatio
 
 ## Contributing
 
-We welcome contributions to mini-moulinette! Here are a few ways you can help out:
+We welcome contributions to small-moulinette! Here are a few ways you can help out:
 
 - Testing: We rely on community feedback to ensure our tests are comprehensive and accurate. If you notice an error in one of our tests or have an idea for a new test case, please let us know! You can contact us via email at [email address] or on Discord at [Discord username]. We would greatly appreciate any feedback or suggestions you have.
 - Code: If you're interested in contributing to the codebase itself, we'd be happy to review any pull requests you submit. We have a few guidelines to ensure that our code is readable and maintainable, so please take a look at our contributing guidelines before you get started.
-- Features: Do you have an idea for a new feature that you think would be useful for mini-moulinette? We'd love to hear it! Please create an issue on our GitHub repository to start a discussion.
-- Feedback: If you've used mini-moulinette and have some feedback or suggestions for improvement, please let us know! Your input is valuable to us, and we're always looking for ways to make our test runner better.
+- Features: Do you have an idea for a new feature that you think would be useful for small-moulinette? We'd love to hear it! Please create an issue on our GitHub repository to start a discussion.
+- Feedback: If you've used small-moulinette and have some feedback or suggestions for improvement, please let us know! Your input is valuable to us, and we're always looking for ways to make our test runner better.
 
-When contributing to mini-moulinette, please be sure to follow our code of conduct and our guidelines for submitting contributions. Thank you for your interest in our project, and we look forward to working with you!
+When contributing to small-moulinette, please be sure to follow our code of conduct and our guidelines for submitting contributions. Thank you for your interest in our project, and we look forward to working with you!
 
 
 ## Authors
