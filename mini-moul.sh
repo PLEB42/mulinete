@@ -1,12 +1,9 @@
 #!/bin/bash
 
 # ==============================================================================
-# BLOCO: AMBIENTE_E_INFRAESTRUTURA [v10]
-# O QUE FAZ: Resolve o caminho absoluto da ferramenta e define constantes.
-# OBJETIVO FUNCIONAL: Evitar 'diretório nulo' garantindo caminhos imutáveis.
+# BLOCO: AMBIENTE_E_INFRAESTRUTURA [v12]
+# O QUE FAZ: Resolve caminhos absolutos e prepara a pasta de logs.
 # ==============================================================================
-
-# Resolução de caminho absoluto (Blindada para Linux/macOS)
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
@@ -14,74 +11,91 @@ while [ -h "$SOURCE" ]; do
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 readonly TOOL_ROOT="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-
-# Definições de Trabalho (Imutáveis)
 readonly CURRENT_INVOCATION_DIR=$(pwd)
-readonly SANDBOX_NAME="mini-moul_tmp"
-readonly SANDBOX_PATH="$CURRENT_INVOCATION_DIR/$SANDBOX_NAME"
-readonly ABSOLUTE_LOG_PATH="$TOOL_ROOT/mini-moul.log"
+readonly SANDBOX_PATH="$CURRENT_INVOCATION_DIR/mini-moul_tmp"
+readonly LOGS_DIR="$TOOL_ROOT/logs"
+
+mkdir -p "$LOGS_DIR"
+
+# Cores para UI
+readonly PINK='\033[38;5;206m'; readonly BLUE='\033[38;5;39m'; readonly DEFAULT='\033[0m'
+readonly BOLD='\033[1m'; readonly CYAN='\033[38;5;51m'; readonly YELLOW='\033[38;5;226m'; readonly RED='\033[0;31m'
 
 # ==============================================================================
-# BLOCO: GERENCIADOR_DE_ESTADO [v10]
-# O QUE FAZ: Controla a criação e destruição da sandbox de testes.
-# OBJETIVO FUNCIONAL: Limpeza garantida sem comandos órfãos.
+# BLOCO: PROJECT_DISPATCHER [v2]
+# O QUE FAZ: Prepara a sandbox e dispara o test.sh com o log correto.
 # ==============================================================================
-
-limpar_sandbox() {
-    # Garante que só tenta remover se o caminho não for nulo e existir
-    if [[ -n "$SANDBOX_PATH" && -d "$SANDBOX_PATH" ]]; then
-        rm -rf "$SANDBOX_PATH" &>/dev/null
-    fi
-}
-
-encerrar_com_seguranca() {
-    printf "\n${RED}🚨 Execução interrompida.${DEFAULT} Limpando rastros...\n"
-    limpar_sandbox
-    exit 1
-}
-
-trap encerrar_com_seguranca SIGINT SIGTERM
-
-# ==============================================================================
-# BLOCO: FLUXO_PRINCIPAL [v10]
-# O QUE FAZ: Valida, prepara a sandbox e dispara o motor de testes.
-# ==============================================================================
-
-executar_moulinette() {
-    local modulo_alvo=$(basename "$CURRENT_INVOCATION_DIR")
-    local verbose_flag=0
-    [[ "$1" == "-v" || "$1" == "--verbose" ]] && verbose_flag=1
-
-    # 1. Validação de Contexto (Piscina 42)
-    if [[ ! $modulo_alvo =~ ^(C(0[0-9]|1[0-3])|Shell0[0-9]|Rush0[0-2])$ ]]; then
-        printf "❌ Erro: O diretório atual '%s' não é um módulo válido.\n" "$modulo_alvo"
-        exit 1
-    fi
-
-    # 2. Preparação da Sandbox
-    limpar_sandbox
+preparar_e_executar() {
+    local projeto=$1
+    local log_path="$LOGS_DIR/${projeto}.txt"
     
-    # Valida se a pasta da engine existe na 'Home' da ferramenta
-    if [[ ! -d "$TOOL_ROOT/mini-moul" ]]; then
-        printf "❌ Erro Crítico: Pasta 'mini-moul' não encontrada em: %s\n" "$TOOL_ROOT"
+    # Limpeza e Preparação
+    rm -rf "$SANDBOX_PATH" &>/dev/null
+    mkdir -p "$SANDBOX_PATH"
+    
+    # Copia a pasta interna da engine para a sandbox
+    if [[ -d "$TOOL_ROOT/mini-moul" ]]; then
+        cp -R "$TOOL_ROOT/mini-moul/." "$SANDBOX_PATH/"
+    else
+        printf "${RED}❌ Erro Crítico: Pasta 'mini-moul' (engine) não encontrada.${DEFAULT}\n"
         exit 1
     fi
 
-    # Cópia isolada para a sandbox
-    cp -R "$TOOL_ROOT/mini-moul" "$SANDBOX_PATH"
-
-    # 3. Handshake com o Engine (test.sh)
+    # Handshake com a Engine
     if [[ -f "$SANDBOX_PATH/test.sh" ]]; then
         cd "$SANDBOX_PATH" || exit 1
-        bash ./test.sh "$modulo_alvo" "$verbose_flag" "$ABSOLUTE_LOG_PATH"
+        bash ./test.sh "$projeto" 0 "$log_path"
         cd "$CURRENT_INVOCATION_DIR" || exit 1
     else
-        printf "❌ Erro: Engine de teste (test.sh) não encontrada na sandbox.\n"
+        printf "${RED}❌ Erro: test.sh não encontrado na sandbox.${DEFAULT}\n"
     fi
-
-    # 4. Finalização
-    limpar_sandbox
+    rm -rf "$SANDBOX_PATH" &>/dev/null
 }
 
-# Início da execução
-executar_moulinette "$@"
+# ==============================================================================
+# BLOCO: UI_MENU_SYSTEM [v2]
+# O QUE FAZ: Interface para projetos fora do fluxo automático da Piscina.
+# ==============================================================================
+exibir_submenu_common_core() {
+    printf "\n${BLUE}--- Common Core - Milestones ---${DEFAULT}\n"
+    printf "1. Milestone 0 (Libft)\n"
+    printf "2. Voltar\n"
+    printf "Escolha: "
+    read -r sub
+    case $sub in
+        1) preparar_e_executar "Libft" ;;
+        2) exibir_menu_principal ;;
+    esac
+}
+
+exibir_menu_principal() {
+    clear
+    printf "${PINK}${BOLD}╔══════════════════════════════════════════════════════════════╗${DEFAULT}\n"
+    printf "${PINK}${BOLD}║              🌊  MINI-MOUL - COMMAND CENTER                  ║${DEFAULT}\n"
+    printf "${PINK}${BOLD}╚══════════════════════════════════════════════════════════════╝${DEFAULT}\n"
+    printf "${CYAN}1. Piscina (Auto-Detect)${DEFAULT}\n"
+    printf "${CYAN}2. Piscine Reloaded${DEFAULT}\n"
+    printf "${CYAN}3. Common Core (Milestones)${DEFAULT}\n"
+    printf "${YELLOW}0. Sair${DEFAULT}\n"
+    printf "\n${BOLD}Escolha uma opção: ${DEFAULT}"
+    read -r opcao
+
+    case $opcao in
+        1) preparar_e_executar "$(basename "$CURRENT_INVOCATION_DIR")" ;;
+        2) preparar_e_executar "Reloaded" ;;
+        3) exibir_submenu_common_core ;;
+        0) exit 0 ;;
+        *) exibir_menu_principal ;;
+    esac
+}
+
+# ==============================================================================
+# BLOCO: CONTEXT_AGENT [v2] - RECUPERADO
+# O QUE FAZ: Se estiver em pasta CXX ou ShellXX, roda direto.
+# ==============================================================================
+DIRETORIO_ATUAL=$(basename "$CURRENT_INVOCATION_DIR")
+if [[ $DIRETORIO_ATUAL =~ ^(C(0[0-9]|1[0-3])|Shell0[0-9])$ ]]; then
+    preparar_e_executar "$DIRETORIO_ATUAL"
+else
+    exibir_menu_principal
+fi
