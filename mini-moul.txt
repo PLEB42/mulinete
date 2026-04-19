@@ -1,30 +1,14 @@
-ex00/ft_ft.c: OK
-	  [38;5;84m✓[38;5;8m [1] ft_ft() Expected 42, got 42
-	[0mex01/ft_ultimate_ft.c: OK
-	  [38;5;84m✓[38;5;8m [1] ft_ultimate_ft() Expected 42, got 42
-	[0mex02/ft_swap.c: OK
-	  [38;5;84m✓[38;5;8m [1] Swap two positive integers Passed
-	[0m  [38;5;84m✓[38;5;8m [2] Swap a positive and negative integer Passed
-	[0m  [38;5;84m✓[38;5;8m [3] Swap two negative integers Passed
-	[0m  [38;5;84m✓[38;5;8m [4] Swap numbers that may exceed INT_MAX if added Passed
-	[0mex03/ft_div_mod.c: OK
-	  [38;5;84m✓[38;5;8m [1] ft_div_mod(10, 5, &x, &y) Expected x = 2, got 2. Expected y = 0, got 0
-	[0m  [38;5;84m✓[38;5;8m [2] ft_div_mod(25, 6, &x, &y) Expected x = 4, got 4. Expected y = 1, got 1
-	[0m  [38;5;84m✓[38;5;8m [3] ft_div_mod(47, 8, &x, &y) Expected x = 5, got 5. Expected y = 7, got 7
-	[0mex04/ft_ultimate_div_mod.c: KO (Norme)
-	../ex04/ft_ultimate_div_mod.c: Error!
-		[31mError: Unexpected EOF l.22[0m
-ex05/ft_putstr.c: KO (Norme)
-	../ex05/ft_putstr.c: Error!
-	Error: TOO_MANY_TAB         (line:  24, col:   1):	Extra tabs for indent level
-ex06/ft_strlen.c: OK
-	  [38;5;84m✓[38;5;8m [1] ft_strlen("") output 0 as expected
-	[0m  [38;5;84m✓[38;5;8m [2] ft_strlen("H") output 1 as expected
-	[0m  [38;5;84m✓[38;5;8m [3] ft_strlen("Hello, world!") output 13 as expected
-	[0m  [38;5;84m✓[38;5;8m [4] ft_strlen("Hello") output 5 as expected
-	[0m  [38;5;84m✓[38;5;8m [5] ft_strlen("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") output 62 as expected
-	[0mex07/ft_rev_int_tab.c: OK
-	  [38;5;84m✓[38;5;8m [1] Tab successfully reversed
-	[0mex08/ft_sort_int_tab.c: OK
-	  [38;5;84m✓[38;5;8m [1] Successfully sorted tab.
-	[0m
+ex00: missing_directory
+[ex02] FAIL: A extensão '.sh' foi detectada na saída. Deve exibir apenas o nome.
+[ex02] FAIL: O arquivo '.sh' foi listado incorretamente.
+ex01: KO
+[ex02] PASS
+ex02: OK
+[ex03] PASS
+ex03: OK
+[ex04] FAIL: saida vazia — nenhum endereco MAC exibido
+ex04: KO
+[ex07] FAIL: Arquivo 'b' não encontrado no diretório ex07/[cite: 110, 207].
+ex07: KO
+./tests/Shell01/ex08//run_test.sh: linha 22: bc: comando não encontrado
+ex08: OK

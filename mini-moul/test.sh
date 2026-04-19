@@ -1,39 +1,36 @@
 #!/bin/bash
 
 # ==============================================================================
-# BLOCK: STATE_AND_ENVIRONMENT [v14]
-# DESCRIPTION: Initializes counters, colors, and the "Fail-Fast" ghost state.
-# OBJECTIVE: Track real progress vs. logical correctness after a failure.
+# BLOCK: STATE_AND_ENVIRONMENT [v16]
+# ALTERAÇÃO: Removida a conversão forçada de extensão de LOG para evitar confusão.
 # ==============================================================================
-
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 source "$SCRIPT_DIR/config.sh"
 
 MODULE_NAME=$1
 VERBOSE=$2
 LOG_FILE=${3:-"$SCRIPT_DIR/../mini-moul.txt"}
-LOG_FILE="${LOG_FILE%.*}.txt"
+
+# Detecção de Tipo de Módulo
+IS_SHELL_MODULE=0
+[[ "$MODULE_NAME" == Shell* ]] && IS_SHELL_MODULE=1
 
 # State Variables
 QUESTIONS_TOTAL=0
-QUESTIONS_PASSED=0    # Only counts if no failure occurred yet
-LOGICAL_SUCCESSES=0   # Counts all OKs regardless of chain failure
-HAS_FAILED_FLAG=0     # 0 = Perfect Run, 1 = Score Locked
+QUESTIONS_PASSED=0
+HAS_FAILED_FLAG=0
 GLOBAL_RESULTS=""
 START_TIME=$(date +%s)
 
-# Reset log for plain text
 > "$LOG_FILE"
 
-# Advanced Box-Drawing Characters (Double Line Style)
 readonly B_TL="╔"; readonly B_TR="╗"; readonly B_BL="╚"; readonly B_BR="╝"
-readonly B_H="═"; readonly B_V="║"; readonly B_D="╬"; readonly B_L="╠"; readonly B_R="╣"; readonly B_SEP="╦"
+readonly B_V="║"; readonly B_H="═"
 
 # ==============================================================================
-# BLOCK: ADVANCED_UI_COMPONENTS [v14]
-# DESCRIPTION: Large, high-impact English UI for the 42 environment.
+# BLOCK: ADVANCED_UI_COMPONENTS [v16]
+# ALTERAÇÃO: Refatoração do printf para lidar com padding de cores ANSI.
 # ==============================================================================
-
 print_header() {
     clear
     printf "${PINK}${BOLD}${B_TL}$(printf '%.0s═' {1..60})${B_TR}${DEFAULT}\n"
@@ -44,11 +41,6 @@ print_header() {
 }
 
 print_summary_table() {
-    local col_ex_w=16
-    local col_st_w=17
-    local col_dt_w=25
-
-    # Cabeçalho original (mantido)
     printf "\n${PURPLE}${BOLD}╔$(printf '%.0s═' {1..16})╦$(printf '%.0s═' {1..17})╦$(printf '%.0s═' {1..25})╗${DEFAULT}\n"
     printf "${PURPLE}${BOLD}║  EXERCISE      ║  STATUS         ║  EVALUATION DETAILS     ║${DEFAULT}\n"
     printf "${PURPLE}${BOLD}╠$(printf '%.0s═' {1..16})╬$(printf '%.0s═' {1..17})╬$(printf '%.0s═' {1..25})╣${DEFAULT}\n"
@@ -57,53 +49,91 @@ print_summary_table() {
     for item in "${ADDR[@]}"; do
         local ex=$(echo $item | cut -d: -f1)
         local st=$(echo $item | cut -d: -f2)
-        
-        local display_st=""
-        local display_dt=""
-        # Definimos o tamanho da compensação ANSI (geralmente 9 a 13 caracteres por cor)
-        # Vamos usar um padding manual para garantir o alinhamento
-        
+        local color_st="${RED}${BOLD}"
+        local text_st="ERROR"
+        local color_dt="${RED}"
+        local text_dt="Unknown"
+
         case $st in
-            "OK")       display_st="${GREEN}${BOLD}PASS (OK)${DEFAULT}";  display_dt="${GREY}Score Added!${DEFAULT}" ;;
-            "GHOST_OK") display_st="${RED}${BOLD}PASS (OK)${DEFAULT}";   display_dt="${RED}Logic OK / Locked${DEFAULT}" ;;
-            "NORM_KO")  display_st="${RED}${BOLD}NORM ERROR${DEFAULT}";  display_dt="${RED}Style Violation${DEFAULT}" ;;
-            "BUILD_KO") display_st="${RED}${BOLD}BUILD ERROR${DEFAULT}"; display_dt="${RED}Compile Conflict${DEFAULT}" ;;
-            "KO")       display_st="${RED}${BOLD}FAILED (KO)${DEFAULT}"; display_dt="${RED}Logic Failure${DEFAULT}" ;;
-            *)          display_st="${RED}${BOLD}ERROR${DEFAULT}";       display_dt="${RED}Unknown State${DEFAULT}" ;;
+            "OK")       color_st="${GREEN}${BOLD}"; text_st="PASS (OK)";  color_dt="${GREY}"; text_dt="Score Added!" ;;
+            "GHOST_OK") color_st="${RED}${BOLD}";   text_st="PASS (OK)";  color_dt="${RED}";  text_dt="Logic OK / Locked" ;;
+            "NORM_KO")  color_st="${RED}${BOLD}";   text_st="NORM ERROR"; color_dt="${RED}";  text_dt="Style Violation" ;;
+            "BUILD_KO") color_st="${RED}${BOLD}";   text_st="BUILD ERROR";color_dt="${RED}";  text_dt="Check Script/Files" ;;
+            "SKIP")     color_st="${CYAN}${BOLD}";  text_st="SKIPPED";    color_dt="${GREY}"; text_dt="Git Env Required" ;;
+            "KO")       color_st="${RED}${BOLD}";   text_st="FAILED (KO)"; color_dt="${RED}";  text_dt="Logic Failure" ;;
         esac
 
-        # IMPRESSÃO CORRIGIDA:
-        # 1. Coluna Exercise: %-14s com 2 espaços de margem interna (total 16)
+        # IMPRESSÃO COM PADDING FIXO (Cores aplicadas fora do alinhamento)
         printf "${PURPLE}║${DEFAULT}  %-14s ${PURPLE}║${DEFAULT}  " "$ex"
-        
-        # 2. Coluna Status: Usamos %-26s para compensar os bytes de cor e manter os 17 de largura
-        # Se a cor mudar o tamanho, ajustamos o valor 26 para mais ou menos
-        printf "%-26b ${PURPLE}║${DEFAULT}  " "$display_st"
-        
-        # 3. Coluna Details: Mesma lógica, %-34b para manter os 25 de largura
-        printf "%-34b ${PURPLE}║${DEFAULT}\n" "$display_dt"
+        printf "%b%-15s%b  ${PURPLE}║${DEFAULT}  " "$color_st" "$text_st" "${DEFAULT}"
+        printf "%b%-23s%b  ${PURPLE}║${DEFAULT}\n" "$color_dt" "$text_dt" "${DEFAULT}"
     done
-
     printf "${PURPLE}${BOLD}╚$(printf '%.0s═' {1..16})╩$(printf '%.0s═' {1..17})╩$(printf '%.0s═' {1..25})╝${DEFAULT}\n"
 }
 
+# ==============================================================================
+# BLOCK: SHELL_ENGINE_V2 [v16]
+# ALTERAÇÃO: Adicionado feedback visual para diretórios ausentes.
+# ==============================================================================
+run_shell_exercise() {
+    local ex_path="$1"
+    local ex_name=$(basename "$ex_path")
+    local student_dir="../$ex_name"
+    local test_script="$ex_path/run_test.sh"
+
+    # --- STAGE 0: GIT GUARD ---
+    if [[ "$ex_name" == "ex05" || "$ex_name" == "ex06" ]]; then
+        GLOBAL_RESULTS+="${ex_name}:SKIP, "
+        return
+    fi
+
+    # --- STAGE 1: DIR CHECK ---
+    if [ ! -d "$student_dir" ]; then
+        printf "\r${RED}${ICON_FAIL} Failed: ${BOLD}[%s]${DEFAULT} - Directory not found.         \n" "$ex_name"
+        echo "$ex_name: missing_directory" >> "$LOG_FILE"
+        GLOBAL_RESULTS+="${ex_name}:KO, "
+        HAS_FAILED_FLAG=1
+        return
+    fi
+
+    # --- STAGE 2: EXECUTION ---
+    printf "\r${BLUE}🔍 Checking: ${BOLD}[%s]${DEFAULT} - Running Shell Test...        " "$ex_name"
+    if [ -f "$test_script" ]; then
+        if bash "$test_script" >> "$LOG_FILE" 2>&1; then
+             echo "$ex_name: OK" >> "$LOG_FILE"
+             if [ "$HAS_FAILED_FLAG" -eq 0 ]; then
+                 printf "\r${GREEN}${ICON_PASS} Passed: ${BOLD}[%s]${DEFAULT} - Perfect! Vibe Check OK.   \n" "$ex_name"
+                 GLOBAL_RESULTS+="${ex_name}:OK, "
+                 ((QUESTIONS_PASSED++))
+             else
+                 printf "\r${RED}${ICON_PASS} Passed: ${BOLD}[%s]${DEFAULT} - Logic OK but Chain Failed. \n" "$ex_name"
+                 GLOBAL_RESULTS+="${ex_name}:GHOST_OK, "
+             fi
+        else
+             echo "$ex_name: KO" >> "$LOG_FILE"
+             printf "\r${RED}${ICON_FAIL} Failed: ${BOLD}[%s]${DEFAULT} - Functional KO detected.      \n" "$ex_name"
+             GLOBAL_RESULTS+="${ex_name}:KO, "
+             HAS_FAILED_FLAG=1
+        fi
+    else
+        printf "\r${RED}${ICON_FAIL} Failed: ${BOLD}[%s]${DEFAULT} - run_test.sh not found.         \n" "$ex_name"
+        GLOBAL_RESULTS+="${ex_name}:BUILD_KO, "
+        HAS_FAILED_FLAG=1
+    fi
+}
 
 # ==============================================================================
-# BLOCK: EVALUATION_ENGINE_V14
-# DESCRIPTION: Executes tests and manages the Chain-Fail logic.
+# BLOCK: EVALUATION_ENGINE_V14 (PRESERVADO)
 # ==============================================================================
-
 run_c_exercise() {
     local ex_path="$1"
     local ex_name=$(basename "$ex_path")
     local student_dir="../$ex_name"
     local student_file=$(ls "$student_dir"/*.c 2>/dev/null | head -n 1)
     local rel_file="$ex_name/$(basename "$student_file")"
-    local current_pass=0
 
     printf "\r${BLUE}🔍 Checking: ${BOLD}[%s]${DEFAULT} - Analyzing context...          " "$ex_name"
 
-    # --- STAGE 0: FILE CHECK ---
     if [ ! -f "$student_file" ]; then
         echo "$ex_name: missing_file" >> "$LOG_FILE"
         GLOBAL_RESULTS+="${ex_name}:KO, "
@@ -111,7 +141,6 @@ run_c_exercise() {
         return
     fi
 
-    # --- STAGE 1: NORMINETTE ---
     if ! norminette "$student_dir" &> /dev/null; then
         echo "$rel_file: KO (Norme)" >> "$LOG_FILE"
         norminette "$student_dir" | sed 's/^/\t/' >> "$LOG_FILE"
@@ -121,7 +150,6 @@ run_c_exercise() {
         return
     fi
 
-    # --- STAGE 2: COMPILATION ---
     local ld_flags="-Wl,--allow-multiple-definition"
     [[ "$OSTYPE" == "darwin"* ]] && ld_flags="-z muldefs"
     
@@ -134,7 +162,6 @@ run_c_exercise() {
         return
     fi
 
-    # --- STAGE 3: LOGIC EXECUTION ---
     if ! ./test_bin &> .test_out; then
          echo "$rel_file: KO" >> "$LOG_FILE"
          sed 's/^/\t/' .test_out >> "$LOG_FILE"
@@ -145,7 +172,6 @@ run_c_exercise() {
          echo "$rel_file: OK" >> "$LOG_FILE"
          [ "$VERBOSE" -eq 1 ] && sed 's/^/\t/' .test_out >> "$LOG_FILE"
          
-         # --- CHAIN-FAIL LOGIC ---
          if [ "$HAS_FAILED_FLAG" -eq 0 ]; then
              printf "\r${GREEN}${ICON_PASS} Passed: ${BOLD}[%s]${DEFAULT} - Perfect! Vibe Check OK.   \n" "$ex_name"
              GLOBAL_RESULTS+="${ex_name}:OK, "
@@ -155,18 +181,15 @@ run_c_exercise() {
              GLOBAL_RESULTS+="${ex_name}:GHOST_OK, "
          fi
     fi
-    
     rm -f .test_out .comp_err test_bin
 }
 
 # ==============================================================================
-# BLOCK: FINALIZATION_AND_GRADING [v14]
+# BLOCK: FINALIZATION_AND_GRADING [v14] (PRESERVADO COM DESVIO LÓGICO)
 # ==============================================================================
 
 finalizar_execucao() {
     print_summary_table
-    
-    # ANSI Clean
     [[ -f "$LOG_FILE" ]] && sed -i "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" "$LOG_FILE" 2>/dev/null
     
     local end_time=$(date +%s)
@@ -174,7 +197,6 @@ finalizar_execucao() {
     [ "$total" -eq 0 ] && total=1
     local final_grade=$(( (QUESTIONS_PASSED * 100) / total ))
 
-    # Final Report UI
     printf "\n${PURPLE}${BOLD}╔══════════════════════════════════════════════════════════════╗${DEFAULT}\n"
     printf "${PURPLE}${BOLD}║                     FINAL EVALUATION REPORT                  ║${DEFAULT}\n"
     printf "${PURPLE}${BOLD}╠══════════════════════════════════════════════════════════════╣${DEFAULT}\n"
@@ -196,7 +218,13 @@ run_all_tests() {
     for ex_dir in ./tests/"$MODULE_NAME"/*/; do
         [ ! -d "$ex_dir" ] && continue
         ((QUESTIONS_TOTAL++))
-        run_c_exercise "$ex_dir"
+        
+        # Desvio Polimórfico (v15)
+        if [ "$IS_SHELL_MODULE" -eq 1 ]; then
+            run_shell_exercise "$ex_dir"
+        else
+            run_c_exercise "$ex_dir"
+        fi
     done
     finalizar_execucao
 }

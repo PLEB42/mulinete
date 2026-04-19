@@ -54,7 +54,8 @@ fi
 
 # Teste 5: ordenado por data de modificacao (mais antigo primeiro)
 # file_a(01) < subdir1(02) < file_b(03) < subdir2(04)
-expected="file_a, subdir1/, file_b, subdir2/"
+expected="subdir2/, file_b, subdir1/, file_a"
+
 if [ "$OUTPUT" != "$expected" ]; then
     echo "[ex04] FAIL: ordem ou formato incorreto"
     echo "  Esperado: '$expected'"

@@ -1,28 +1,34 @@
-../ex00/ft_ft.c: OK!
-  [38;5;84m✓[38;5;8m [1] ft_ft() Expected 42, got 42
-[0m../ex01/ft_ultimate_ft.c: OK!
-  [38;5;84m✓[38;5;8m [1] ft_ultimate_ft() Expected 42, got 42
-[0m../ex02/ft_swap.c: OK!
-  [38;5;84m✓[38;5;8m [1] Swap two positive integers Passed
-[0m  [38;5;84m✓[38;5;8m [2] Swap a positive and negative integer Passed
-[0m  [38;5;84m✓[38;5;8m [3] Swap two negative integers Passed
-[0m  [38;5;84m✓[38;5;8m [4] Swap numbers that may exceed INT_MAX if added Passed
-[0m../ex03/ft_div_mod.c: OK!
-  [38;5;84m✓[38;5;8m [1] ft_div_mod(10, 5, &x, &y) Expected x = 2, got 2. Expected y = 0, got 0
-[0m  [38;5;84m✓[38;5;8m [2] ft_div_mod(25, 6, &x, &y) Expected x = 4, got 4. Expected y = 1, got 1
-[0m  [38;5;84m✓[38;5;8m [3] ft_div_mod(47, 8, &x, &y) Expected x = 5, got 5. Expected y = 7, got 7
-[0m../ex04/ft_ultimate_div_mod.c: Error!
-	[31mError: Unexpected EOF l.22[0m
-../ex05/ft_putstr.c: Error!
-Error: TOO_MANY_TAB         (line:  24, col:   1):	Extra tabs for indent level
-../ex06/ft_strlen.c: OK!
-  [38;5;84m✓[38;5;8m [1] ft_strlen("") output 0 as expected
-[0m  [38;5;84m✓[38;5;8m [2] ft_strlen("H") output 1 as expected
-[0m  [38;5;84m✓[38;5;8m [3] ft_strlen("Hello, world!") output 13 as expected
-[0m  [38;5;84m✓[38;5;8m [4] ft_strlen("Hello") output 5 as expected
-[0m  [38;5;84m✓[38;5;8m [5] ft_strlen("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") output 62 as expected
-[0m../ex07/ft_rev_int_tab.c: OK!
-  [38;5;84m✓[38;5;8m [1] Tab successfully reversed
-[0m../ex08/ft_sort_int_tab.c: OK!
-  [38;5;84m✓[38;5;8m [1] Successfully sorted tab.
-[0m
+[ex00] PASS
+ex00: OK
+[ex01] PASS
+ex01: OK
+[ex02] PASS
+ex02: OK
+[ex03] FAIL: O conteúdo de 'id_rsa_pub' não é uma chave pública SSH válida.
+ex03: KO
+[ex04] PASS
+ex04: OK
+[ex07] FAIL: diff a b nao e vazio. Diferencas encontradas:
+1,2c1,8
+< STARWARS
+< Episode IV, A NEW HOPE It is a period of civil war.
+---
+> Episode V, A NEW H0PE It is a period of civil war
+> Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire. 
+> During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the STAR DEATH, an armored space station with enough power to destroy an entire planet.
+> 
+> 
+> Pursued by the Empire's sinister agents,
+> Princess Mehdi races home aboard her starship, custodian of the stolen plans that can save her people and restore the dictatorship to the galaxie..
+> 
+4,6d9
+< Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire.
+< During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the DEATH STAR,
+< an armored space station with enough power to destroy an entire planet.
+8d10
+< Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy...
+ex07: KO
+[ex08] PASS
+ex08: OK
+[ex09] PASS
+ex09: OK
