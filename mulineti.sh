@@ -12,7 +12,7 @@ while [ -h "$SOURCE" ]; do
 done
 readonly TOOL_ROOT="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 readonly CURRENT_INVOCATION_DIR=$(pwd)
-readonly SANDBOX_PATH="$CURRENT_INVOCATION_DIR/mini-moul_tmp"
+readonly SANDBOX_PATH="$CURRENT_INVOCATION_DIR/mulineti_tmp"
 readonly LOGS_DIR="$TOOL_ROOT/logs"
 
 mkdir -p "$LOGS_DIR"
@@ -34,10 +34,10 @@ preparar_e_executar() {
     mkdir -p "$SANDBOX_PATH"
     
     # Copia a pasta interna da engine para a sandbox
-    if [[ -d "$TOOL_ROOT/mini-moul" ]]; then
-        cp -R "$TOOL_ROOT/mini-moul/." "$SANDBOX_PATH/"
+    if [[ -d "$TOOL_ROOT/mulineti" ]]; then
+        cp -R "$TOOL_ROOT/mulineti/." "$SANDBOX_PATH/"
     else
-        printf "${RED}❌ Erro Crítico: Pasta 'mini-moul' (engine) não encontrada.${DEFAULT}\n"
+        printf "${RED}❌ Erro Crítico: Pasta 'mulineti' (engine) não encontrada.${DEFAULT}\n"
         exit 1
     fi
 
@@ -71,7 +71,7 @@ exibir_submenu_common_core() {
 exibir_menu_principal() {
     clear
     printf "${PINK}${BOLD}╔══════════════════════════════════════════════════════════════╗${DEFAULT}\n"
-    printf "${PINK}${BOLD}║              🌊  MINI-MOUL - COMMAND CENTER                  ║${DEFAULT}\n"
+    printf "${PINK}${BOLD}║              🌊  MULINETI - COMMAND CENTER                   ║${DEFAULT}\n"
     printf "${PINK}${BOLD}╚══════════════════════════════════════════════════════════════╝${DEFAULT}\n"
     printf "${CYAN}1. Piscina (Auto-Detect)${DEFAULT}\n"
     printf "${CYAN}2. Piscine Reloaded${DEFAULT}\n"

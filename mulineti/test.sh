@@ -14,8 +14,28 @@ LOG_FILE=$3
 
 # Definição de Base de Busca (Suporte para Piscina e Reloaded)
 STUDENT_BASE_DIR="../"
-[[ "$MODULE_NAME" == "Reloaded" ]] && STUDENT_BASE_DIR="/home/renan/reloaded"
 
+# ==============================================================================
+# BLOCO: PROJECT_AUTO_CONFIG [v19]
+# O QUE FAZ: Define caminhos de busca dinamicamente usando a variável $HOME.
+# ==============================================================================
+STUDENT_BASE_DIR="../"
+
+case "$MODULE_NAME" in
+    "Reloaded")
+        # Localiza a pasta reloaded na raiz do usuário atual (~/reloaded)
+        if [ -d "${HOME}/reloaded" ]; then
+            STUDENT_BASE_DIR="${HOME}/reloaded"
+        else
+            # Caso não encontre na Home, mantém o padrão da Piscina
+            STUDENT_BASE_DIR="../"
+        fi
+        ;;
+    "Libft")
+        # Exemplo para futuros projetos do Common Core
+        STUDENT_BASE_DIR="../"
+        ;;
+esac
 # Determinação do Motor de Avaliação (Polimorfismo)
 IS_SHELL_MODULE=0
 [[ "$MODULE_NAME" == Shell* || "$MODULE_NAME" == "Reloaded" ]] && IS_SHELL_MODULE=1

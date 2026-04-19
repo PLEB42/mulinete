@@ -4,7 +4,7 @@
 # BLOCO 1: RESOLUÇÃO DE AMBIENTE E PATHS [v2]
 # O QUE FAZ: Localiza o diretório de entrega de forma absoluta.
 # OBJETIVO FUNCIONAL: Garantir que o teste funcione independente de onde
-# o script mini-moul seja disparado.
+# o script mulineti seja disparado.
 # ==============================================================================
 PASS=0
 FAIL=1
