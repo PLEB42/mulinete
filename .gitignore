@@ -3,10 +3,9 @@ logs/*.txt
 logs/*.log
 mini-moul.txt
 mini-moul.log
-
-# Artefatos de compilação temporários
+.claude/
+# Compilation artifacts
 bin
 output.txt
 *.o
-/.claude
 CLAUDE.md
