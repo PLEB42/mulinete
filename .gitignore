@@ -1,6 +1,8 @@
-# Logs gerados pelo mulineti
+# Generated logs
 logs/*.txt
 logs/*.log
+mini-moul.txt
+mini-moul.log
 
 # Artefatos de compilação temporários
 bin
