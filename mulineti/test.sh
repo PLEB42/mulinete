@@ -24,8 +24,8 @@ STUDENT_BASE_DIR="../"
 case "$MODULE_NAME" in
     "Reloaded")
         # Localiza a pasta reloaded na raiz do usuário atual (~/reloaded)
-        if [ -d "${HOME}/reloaded" ]; then
-            STUDENT_BASE_DIR="${HOME}/reloaded"
+        if [ -d "${HOME}/PISCINE_RELOADED" ]; then
+            STUDENT_BASE_DIR="${HOME}/PISCINE_RELOADED"
         else
             # Caso não encontre na Home, mantém o padrão da Piscina
             STUDENT_BASE_DIR="../"
@@ -162,7 +162,7 @@ run_c_exercise() {
     fi
 
     # Compilação
-    if cc -Wall -Wextra -Werror -o bin "$std_file" "$ex_path"/*.c &>> "$LOG_FILE"; then
+    if cc -Wall -Wextra -Werror -o bin "$ex_path"/*.c &>> "$LOG_FILE"; then
         if ./bin >> "$LOG_FILE" 2>&1; then
             echo "$ex_name: OK" >> "$LOG_FILE"
             if [ "$HAS_FAILED_FLAG" -eq 0 ]; then
@@ -192,7 +192,7 @@ finalizar_avaliacao() {
     print_summary_table
     
     # Remoção de códigos ANSI do ficheiro de log para leitura limpa
-    [[ -f "$LOG_FILE" ]] && sed -i "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" "$LOG_FILE" 2>/dev/null
+    [[ -f "$LOG_FILE" ]] && sed -i 's/\x1B\[[0-9;]*[mGKHFJA-Za-z]//g' "$LOG_FILE" 2>/dev/null
     
     local total=${QUESTIONS_TOTAL:-1}
     local final_grade=$(( (QUESTIONS_PASSED * 100) / total ))

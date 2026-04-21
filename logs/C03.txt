@@ -1,0 +1,6 @@
+ex00: KO (Norme)
+ex01: KO (Norme)
+ex02: KO (Norme)
+ex03: KO (Norme)
+ex04: KO (Norme)
+ex05: KO (Norme)
