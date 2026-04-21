@@ -1,0 +1,11 @@
+# Generated logs
+logs/*.txt
+logs/*.log
+mini-moul.txt
+mini-moul.log
+.claude/
+# Compilation artifacts
+bin
+output.txt
+*.o
+CLAUDE.md
