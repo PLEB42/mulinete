@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/renan/mulinete-main log --oneline -10)",
+      "Bash(git mv *)",
+      "Bash(git -C /home/renan/mulinete-main status --short)"
+    ]
+  }
+}

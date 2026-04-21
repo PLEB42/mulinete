@@ -1,0 +1,10 @@
+# Logs gerados pelo mulineti
+logs/*.txt
+logs/*.log
+
+# Artefatos de compilação temporários
+bin
+output.txt
+*.o
+.claude
+CLAUDE.md
