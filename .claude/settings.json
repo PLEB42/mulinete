@@ -3,7 +3,12 @@
     "allow": [
       "Bash(git -C /home/renan/mulinete-main log --oneline -10)",
       "Bash(git mv *)",
-      "Bash(git -C /home/renan/mulinete-main status --short)"
+      "Bash(git -C /home/renan/mulinete-main status --short)",
+      "Bash(xargs -I {} bash -c 'echo \"=== {} ===\"; grep -n \"FAIL\\\\|PASS\\\\|echo\\\\|printf\" {} | head -20')",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)"
     ]
   }
 }

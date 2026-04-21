@@ -8,5 +8,5 @@ mini-moul.log
 bin
 output.txt
 *.o
-.claude
+/.claude
 CLAUDE.md
