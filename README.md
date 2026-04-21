@@ -1,6 +1,6 @@
-# Mulineti
+# Mulinete
 
-![mulineti](mini-moulinette.jpg)
+![mulinete](mini-moulinette.png)
 
 A local test runner for 42 School assignments. Run automated checks against your code before submitting — covering Piscine, Piscine Reloaded, and Common Core projects.
 
@@ -8,7 +8,7 @@ A local test runner for 42 School assignments. Run automated checks against your
 
 ## What It Does
 
-Mulineti runs your exercises through a sandboxed evaluation pipeline that mirrors how the real moulinette grades your work:
+Mulinete runs your exercises through a sandboxed evaluation pipeline that mirrors how the real moulinette grades your work:
 
 - **Norminette validation** — fails the exercise on style violations before wasting time compiling
 - **Compilation** — builds with `-Wall -Werror -Wextra` using the same flags as 42
@@ -28,7 +28,7 @@ Mulineti runs your exercises through a sandboxed evaluation pipeline that mirror
 | C00 – C08   | C      | Supported     | Full compilation + functional tests        |
 | C09 – C11   | C      | In Progress   |                                            |
 | C12 – C13   | C      | In Progress   | Valgrind configured, tests WIP             |
-| Reloaded    | Shell  | Supported     | Auto-detects `~/reloaded`                  |
+| Reloaded    | Shell  | Supported     | Auto-detects `~/PISCINE_RELOADED`          |
 | Libft       | C      | Supported     | Common Core milestone                      |
 
 ---
@@ -37,7 +37,7 @@ Mulineti runs your exercises through a sandboxed evaluation pipeline that mirror
 
 ### Context-Aware Auto-Detection
 
-If you run `mulineti` from inside a recognized folder (e.g. `C02`, `Shell01`), it launches directly — no menu needed.
+If you run `mulinete` from inside a recognized folder (e.g. `C02`, `Shell01`), it launches directly — no menu needed.
 
 ```
 C02/  →  runs C02 tests automatically
@@ -48,9 +48,9 @@ From any other directory, the interactive menu opens:
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║              🌊  MULINETI - COMMAND CENTER                   ║
+║              🌊  MULINETE - COMMAND CENTER                   ║
 ╚══════════════════════════════════════════════════════════════╝
-1. Piscina (Auto-Detect)
+1. Piscine (Auto-Detect)
 2. Piscine Reloaded
 3. Common Core (Milestones)
 0. Exit
@@ -58,11 +58,11 @@ From any other directory, the interactive menu opens:
 
 ### Sandbox Architecture
 
-Each run copies the engine into an isolated `mulineti_tmp/` folder, executes tests there, then deletes the sandbox. Your working directory is never touched.
+Each run copies the engine into an isolated `mulinete_tmp/` folder, executes tests there, then deletes the sandbox. Your working directory is never touched.
 
 ### Piscine Reloaded Integration
 
-When running the Reloaded module, Mulineti looks for your work at `~/reloaded`. If the folder doesn't exist, it falls back to the parent directory (standard Piscine behavior).
+When running the Reloaded module, Mulinete looks for your work at `~/PISCINE_RELOADED`. If the folder doesn't exist, it falls back to the parent directory (standard Piscine behavior).
 
 ### Scoring Logic
 
@@ -81,43 +81,43 @@ Results follow 42's chain-failure model:
 
 ## Getting Started
 
-> **Warning:** Mulineti is not 100% accurate. Tests may not cover every edge case that the real moulinette checks. Use it as a pre-submission sanity check, not as a guarantee.
+> **Warning:** Mulinete is not 100% accurate. Tests may not cover every edge case that the real moulinette checks. Use it as a pre-submission sanity check, not as a guarantee.
 
 ### 1. Clone to your home directory
 
 ```bash
-git clone https://github.com/khairulhaaziq/mini-moulinette.git ~/mulineti
+git clone https://github.com/PLEB42/mulinete.git ~/mulinete
 ```
 
 ### 2. Create an alias
 
 **zsh:**
 ```zsh
-echo "alias mulineti='~/mulineti/mulineti.sh'" >> ~/.zshrc && source ~/.zshrc
+echo "alias mulinete='~/mulinete/mulinete.sh'" >> ~/.zshrc && source ~/.zshrc
 ```
 
 **bash:**
 ```bash
-echo "alias mulineti='~/mulineti/mulineti.sh'" >> ~/.bashrc && source ~/.bashrc
+echo "alias mulinete='~/mulinete/mulinete.sh'" >> ~/.bashrc && source ~/.bashrc
 ```
 
 ### 3. Run from your exercise directory
 
 ```bash
 cd ~/C02
-mulineti
+mulinete
 ```
 
 Or from anywhere using the menu:
 
 ```bash
-mulineti
+mulinete
 ```
 
 ### Updating
 
 ```bash
-cd ~/mulineti && git pull
+cd ~/mulinete && git pull
 ```
 
 ---
@@ -127,7 +127,7 @@ cd ~/mulineti && git pull
 Each run saves a clean log (no ANSI codes) to:
 
 ```
-mulineti/logs/<module>.txt
+mulinete/logs/<module>.txt
 ```
 
 Example: `logs/C02.txt`, `logs/Reloaded.txt`, `logs/Shell01.txt`
@@ -145,7 +145,7 @@ Example: `logs/C02.txt`, `logs/Reloaded.txt`, `logs/Shell01.txt`
 Test cases live under:
 
 ```bash
-~/mulineti/mulineti/tests/<module>/<exercise>/
+~/mulinete/mulinete/tests/<module>/<exercise>/
 ```
 
 For C modules, tests are written as arrays of `t_test` structs. For Shell modules, they are `run_test.sh` scripts. You can inspect and extend them.
@@ -155,7 +155,7 @@ For C modules, tests are written as arrays of `t_test` structs. For Shell module
 ## Contributing
 
 - **Bug reports / test corrections:** Open an issue or reach out on Discord
-- **New test cases:** Submit a pull request — follow the existing structure under `mulineti/tests/`
+- **New test cases:** Submit a pull request — follow the existing structure under `mulinete/tests/`
 - **New modules:** Open an issue to discuss coverage before implementing
 
 ---
